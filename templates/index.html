@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI学习助手</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.15.4/dist/browser/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.15.4/dist/browser/index.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="file-upload" id="dropZone">
+                <div class="upload-content animate__animated animate__pulse animate__infinite">
+                    <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <p>拖拽文件到这里或点击上传</p>
+                    <input type="file" id="fileInput" accept=".pdf,.txt,.md" hidden>
+                </div>
+            </div>
+            <div class="actions">
+                <button onclick="startChat()" class="action-btn animate__animated animate__fadeIn">开始对话</button>
+                <button onclick="getSummary()" class="action-btn animate__animated animate__fadeIn">生成总结</button>
+                <button onclick="getReview()" class="action-btn animate__animated animate__fadeIn">复习建议</button>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div class="chat-container" id="chatContainer">
+                <div class="message ai-message animate__animated animate__fadeIn">
+                    <div class="message-header">
+                        <strong>AI助手</strong>
+                        <span class="timestamp">{{ now }}</span>
+                    </div>
+                    <div class="message-content">
+                        👋 欢迎使用AI学习助手！
+                        <br><br>
+                        我可以帮助你：
+                        <ul>
+                            <li>📚 理解文档内容</li>
+                            <li>🤔 回答相关问题</li>
+                            <li>📝 生成学习总结</li>
+                            <li>📌 提供复习建议</li>
+                        </ul>
+                        <br>
+                        请先上传一个文档开始学习吧！
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <textarea 
+                    id="messageInput" 
+                    placeholder="输入你的问题..." 
+                    disabled
+                    class="animate__animated animate__fadeIn"
+                ></textarea>
+                <button 
+                    onclick="sendMessage()" 
+                    id="sendButton" 
+                    class="send-btn animate__animated animate__fadeIn" 
+                    disabled
+                >
+                    发送
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <template id="mindmap-controls-template">
+        <div class="mindmap-controls animate__animated animate__fadeIn">
+            <button class="mindmap-control-btn" onclick="mindmap.fit()" title="适应屏幕">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                </svg>
+            </button>
+            <button class="mindmap-control-btn" onclick="mindmap.rescale(1.2)" title="放大">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    <line x1="11" y1="8" x2="11" y2="14"/>
+                    <line x1="8" y1="11" x2="14" y2="11"/>
+                </svg>
+            </button>
+            <button class="mindmap-control-btn" onclick="mindmap.rescale(0.8)" title="缩小">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    <line x1="8" y1="11" x2="14" y2="11"/>
+                </svg>
+            </button>
+            <button class="mindmap-control-btn" onclick="downloadMindmap()" title="下载">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+            </button>
+        </div>
+    </template>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 
